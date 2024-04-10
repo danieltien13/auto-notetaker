@@ -1,0 +1,7 @@
+streamlit
+sentence_transformers
+transformers
+datasets
+torch
+streamlit-audiorec
+accelerate
