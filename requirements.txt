@@ -3,5 +3,6 @@ sentence_transformers
 transformers
 datasets
 torch
-streamlit-audiorec
 accelerate
+soundfile
+streamlit-audiorecorder

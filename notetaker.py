@@ -1,42 +1,72 @@
 import streamlit as st
-from sentence_transformers import SentenceTransformer
 import torch
-import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
 import typing
 from st_audiorec import st_audiorec
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
 from datasets import load_dataset
+import io
+import soundfile as sf
+from audiorecorder import audiorecorder
 
-st.title("Automatic Notetaker")
+# from sklearn.metrics.pairwise import cosine_similarity
+# import pandas as pd
+# from sentence_transformers import SentenceTransformer
 
-wav_audio_data = st_audiorec()
 
-if wav_audio_data is not None:
-    st.write("Saved recording:")
-    st.audio(wav_audio_data, format='audio/wav')
-    st.write(type(wav_audio_data))
+@st.cache_resource
+def import_models():
+    # load model and processor
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-# load model and processor
-processor = WhisperProcessor.from_pretrained("openai/whisper-tiny")
-model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-tiny")
-model.config.forced_decoder_ids = None
+    model_id = "openai/whisper-large-v3"
 
-# load dummy dataset and read audio files
-# ds = load_dataset("hf-internal-testing/librispeech_asr_dummy",
-#                   "clean", split="validation")
-# sample = ds[0]["audio"]
-# input_features = processor(
-#     sample["array"], sampling_rate=sample["sampling_rate"], return_tensors="pt").input_features
+    model = AutoModelForSpeechSeq2Seq.from_pretrained(
+        model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
+    )
+    model.to(device)
 
-input_features = processor(
-    wav_audio_data, sampling_rate=16000, return_tensors="pt").input_features
+    processor = AutoProcessor.from_pretrained(model_id)
 
-# generate token ids
-predicted_ids = model.generate(input_features)
-# decode token ids to text
-transcription = processor.batch_decode(
-    predicted_ids, skip_special_tokens=False)
+    pipe = pipeline(
+        "automatic-speech-recognition",
+        model=model,
+        tokenizer=processor.tokenizer,
+        feature_extractor=processor.feature_extractor,
+        max_new_tokens=128,
+        chunk_length_s=30,
+        batch_size=16,
+        return_timestamps=True,
+        torch_dtype=torch_dtype,
+        device=device,
+    )
 
-st.write("finished!")
+    return pipe
+
+
+st.title("Automatic Notetaker :robot_face::pencil:")
+
+audio = audiorecorder("Click to record", "Click to stop recording")
+
+wav_audio_data = None
+
+with st.status("Loading models..."):
+    pipe = import_models()
+
+if len(audio) > 0:
+    wav_audio_data = audio.export().read()
+    with st.status("Generating transcription:", expanded=True) as status:
+        st.write("Saved audio file:")
+        audio_output = st.audio(wav_audio_data, format='audio/wav')
+
+        # To get audio properties, use pydub AudioSegment properties:
+        st.write(
+            f"Duration: {audio.duration_seconds} seconds")
+
+        result = pipe(wav_audio_data)
+        st.divider()
+        st.write("**Transcription:**")
+        st.write((result["text"]))
+        status.update(label="Transcription complete!",
+                      state="complete", expanded=True)
