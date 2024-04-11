@@ -1,7 +1,6 @@
 import streamlit as st
 import torch
 import typing
-from st_audiorec import st_audiorec
 from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
 from datasets import load_dataset
