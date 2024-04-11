@@ -4,5 +4,3 @@ datasets
 torch
 accelerate
 streamlit-audiorecorder
-ffmpeg
-ffprobe
