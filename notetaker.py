@@ -41,6 +41,8 @@ def import_models():
 
 st.title("Automatic Notetaker :robot_face::pencil:")
 
+st.write("v.0.0.1")
+
 audio = audiorecorder("Click to record", "Click to stop recording")
 
 wav_audio_data = None
