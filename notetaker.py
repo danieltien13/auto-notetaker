@@ -5,7 +5,6 @@ from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from transformers import WhisperProcessor, WhisperForConditionalGeneration
 from datasets import load_dataset
 import io
-import soundfile as sf
 from audiorecorder import audiorecorder
 
 # from sklearn.metrics.pairwise import cosine_similarity

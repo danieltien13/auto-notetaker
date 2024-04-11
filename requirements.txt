@@ -4,6 +4,4 @@ transformers
 datasets
 torch
 accelerate
-soundfile
 streamlit-audiorecorder
-ffmpeg
