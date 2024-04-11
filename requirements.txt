@@ -6,3 +6,4 @@ torch
 accelerate
 soundfile
 streamlit-audiorecorder
+ffmpeg
