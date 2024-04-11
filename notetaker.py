@@ -20,7 +20,7 @@ def import_models():
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
 
-    model_id = "openai/whisper-large-v3"
+    model_id = "openai/whisper-base"  # "openai/whisper-large-v3"
 
     model = AutoModelForSpeechSeq2Seq.from_pretrained(
         model_id, torch_dtype=torch_dtype, low_cpu_mem_usage=True, use_safetensors=True
@@ -60,7 +60,6 @@ if len(audio) > 0:
         st.write("Saved audio file:")
         audio_output = st.audio(wav_audio_data, format='audio/wav')
 
-        # To get audio properties, use pydub AudioSegment properties:
         st.write(
             f"Duration: {audio.duration_seconds} seconds")
 
