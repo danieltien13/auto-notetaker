@@ -7,10 +7,6 @@ from datasets import load_dataset
 import io
 from audiorecorder import audiorecorder
 
-# from sklearn.metrics.pairwise import cosine_similarity
-# import pandas as pd
-# from sentence_transformers import SentenceTransformer
-
 
 @st.cache_resource
 def import_models():
