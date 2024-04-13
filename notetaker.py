@@ -47,9 +47,9 @@ def import_audio2text_models():
 
 @st.cache_resource
 def import_textgen_models():
-    model_name = "fgoogle/flan-t5-base"
-    tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-base")
-    model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-base")
+    model_name = "google/flan-t5-large"
+    tokenizer = T5Tokenizer.from_pretrained(model_name)
+    model = T5ForConditionalGeneration.from_pretrained(model_name)
     device = "cpu"  # Assuming you're loading on CPU
 
     return model, tokenizer, device
