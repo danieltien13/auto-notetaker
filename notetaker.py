@@ -70,15 +70,14 @@ def generate_text_response(input_text, model, tokenizer, device, preamble=None):
 
 
 def display_generated_text_response(input_text):
-    with st.status("Generating response:", expanded=True):
-        # Generate response
-        preamble_text = "You are an empathetic, honest, and kind person responding to a friend."
-        response_text = generate_text_response(
-            input_text, textgen_model, tokenizer, "cpu", preamble_text)
+    # Generate response
+    preamble_text = "You are an empathetic, honest, and kind person responding to a friend."
+    response_text = generate_text_response(
+        input_text, textgen_model, tokenizer, "cpu", preamble_text)
 
-        # Display response
-        st.subheader("Generated Response:")
-        st.write(response_text)
+    # Display response
+    st.subheader("Generated Response:")
+    st.write(response_text)
 
 
 st.title("Automatic Notetaker :robot_face::pencil:")
@@ -119,6 +118,7 @@ if len(audio) > 0:
                       state="complete", expanded=True)
         st.write("Summary of text:")
         st.write(summarizer(input_text, max_length=130, min_length=30, do_sample=False)[0]["summary_text"])
+    with st.status("Generating response:", expanded=True):
         display_generated_text_response(input_text)
 elif text_input:
     input_text = text_input
@@ -126,4 +126,5 @@ elif text_input:
     st.write(input_text)
     st.write("Summary of text:")
     st.write(summarizer(input_text, max_length=130, min_length=30, do_sample=False)[0]["summary_text"])
-    display_generated_text_response(input_text)
+    with st.status("Generating response:", expanded=True):
+        display_generated_text_response(input_text)
