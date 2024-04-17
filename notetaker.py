@@ -60,14 +60,11 @@ def generate_text_response(input_text, model, tokenizer, device, preamble=None):
     if preamble:
         input_text = preamble + " " + input_text
 
-    input_ids = tokenizer(input_text, return_tensors="pt").input_ids
+    inputs = tokenizer(input_text, return_tensors="pt")
 
-    outputs = model.generate(input_ids)
+    outputs = model.generate(**inputs)
 
-    response_text = tokenizer.decode(outputs[0])
-
-    response_text = response_text.replace(
-        "<pad>", "").replace("</s>", "").strip()
+    response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     return response_text
 
