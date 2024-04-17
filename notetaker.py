@@ -94,9 +94,6 @@ wav_audio_data = None
 with st.status("Loading audio2text model..."):
     pipe = import_audio2text_models()
 
-with st.status("Loading textgen model..."):
-    textgen_model, tokenizer, device = import_textgen_models()
-
 with st.status("Loading summarization model..."):
     summarizer = import_summarization_model()
 
@@ -117,14 +114,10 @@ if len(audio) > 0:
         status.update(label="Transcription complete!",
                       state="complete", expanded=True)
         st.write("Summary of text:")
-        st.write(summarizer(input_text, max_length=130, min_length=30, do_sample=False)[0]["summary_text"])
-    with st.status("Generating response:", expanded=True):
-        display_generated_text_response(input_text)
+        st.write(summarizer(input_text, max_length=130, min_length=10, do_sample=False)[0]["summary_text"])
 elif text_input:
     input_text = text_input
     st.write("Input text:")
     st.write(input_text)
     st.write("Summary of text:")
-    st.write(summarizer(input_text, max_length=130, min_length=30, do_sample=False)[0]["summary_text"])
-    with st.status("Generating response:", expanded=True):
-        display_generated_text_response(input_text)
+    st.write(summarizer(input_text, max_length=130, min_length=10, do_sample=False)[0]["summary_text"])
