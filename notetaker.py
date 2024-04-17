@@ -50,7 +50,7 @@ def import_textgen_models():
 @st.cache_resource
 def import_summarization_model() -> None:
     """Function importing a summarization model"""
-    model_name = "facebook/bart-large-cnn"
+    model_name = "Falconsai/text_summarization" # "facebook/bart-large-cnn"
     summarizer = pipeline("summarization", model=model_name)
     return summarizer
 
