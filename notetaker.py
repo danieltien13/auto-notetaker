@@ -114,10 +114,10 @@ if len(audio) > 0:
         status.update(label="Transcription complete!",
                       state="complete", expanded=True)
         st.write("Summary of text:")
-        st.write(summarizer(input_text, max_length=130, min_length=10, do_sample=False)[0]["summary_text"])
+        st.write(summarizer(input_text, max_length=300, min_length=10, do_sample=False)[0]["summary_text"])
 elif text_input:
     input_text = text_input
     st.write("Input text:")
     st.write(input_text)
     st.write("Summary of text:")
-    st.write(summarizer(input_text, max_length=130, min_length=10, do_sample=False)[0]["summary_text"])
+    st.write(summarizer(input_text, max_length=300, min_length=10, do_sample=False)[0]["summary_text"])
